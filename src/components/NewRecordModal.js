@@ -1,5 +1,3 @@
-// src/components/NewRecordModal.js
-
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
@@ -15,7 +13,7 @@ const NewRecordModal = ({
   const [providerOptions, setProviderOptions] = useState([]);
 
   useEffect(() => {
-    if (urlBase === "http://127.0.0.1:8000/products" && providers) {
+    if (urlBase === "https://fastapi-evaluation.onrender.com/products" && providers) {
       setProviderOptions(providers.map(provider => (
         <option key={provider.id} value={provider.id}>{provider.name}</option>
       )));
@@ -28,7 +26,7 @@ const NewRecordModal = ({
         <Modal.Title>Nuevo Registro</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {urlBase === "http://127.0.0.1:8000/providers" ? (
+        {urlBase === "https://fastapi-evaluation.onrender.com/providers" ? (
           <Form>
             <Form.Group controlId="formName">
               <Form.Label>Name</Form.Label>

@@ -1,5 +1,3 @@
-// src/components/DetailModal.js
-
 import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 

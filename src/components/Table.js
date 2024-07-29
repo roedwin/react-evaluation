@@ -1,5 +1,3 @@
-// src/components/Table.js
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Table.css';
@@ -8,6 +6,7 @@ const Table = ({ url, onRowClick, refreshKey }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [noData, setNoData] = useState(false); // Nuevo estado para indicar cuando no hay datos
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,15 +14,22 @@ const Table = ({ url, onRowClick, refreshKey }) => {
         setLoading(true);
         const response = await axios.get(url);
         setData(response.data);
+        setNoData(false); // Restablecer en caso de que haya datos
         setLoading(false);
       } catch (error) {
-        setError(error);
+        if (error.response && error.response.status === 404) {
+          // Manejo específico para el estado 404
+          setNoData(true);
+          setData([]); // Asegúrate de limpiar cualquier dato anterior
+        } else {
+          setError(error);
+        }
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [url, refreshKey]); // Adding refreshKey to the dependencies to trigger re-fetch
+  }, [url, refreshKey]); // Agregando refreshKey a las dependencias para disparar el re-fetch
 
   if (loading) {
     return <p>Cargando...</p>;
@@ -31,6 +37,10 @@ const Table = ({ url, onRowClick, refreshKey }) => {
 
   if (error) {
     return <p>Error al cargar los datos: {error.message}</p>;
+  }
+
+  if (noData) {
+    return <p>No se encontraron registros.</p>; // Mostrar mensaje cuando no hay datos
   }
 
   return (
